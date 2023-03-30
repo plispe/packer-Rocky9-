@@ -1,12 +1,11 @@
 lang en_US
 keyboard us
 timezone Europe/Prague --isUtc
-rootpw $2b$10$/5ZWN3MhQsTP4mKK.g3LCeGLd0k8OELoyBDswe0qTKxkl5jldHCRG  --iscrypted
+rootpw $2b$10$INZSJ5B/np1u3f02P79wiectoCrHSoKlc6IX9CIsouGMv6/BxWq0G --iscrypted
 reboot
 text
 cdrom
 # Add a user named packer
-user --groups=wheel --name=packer --password=$2b$10$/5ZWN3MhQsTP4mKK.g3LCeGLd0k8OELoyBDswe0qTKxkl5jldHCRG  --iscrypted --gecos="packer"
 # /etc/default/grub 
 bootloader --append="rhgb quiet crashkernel=auto"
 ignoredisk --only-use=sda
@@ -32,8 +31,6 @@ kexec-tools
 
 %post
 yum install -y cloud-init cloud-utils-growpart open-vm-tools 
-# systemctl enable cloud-init
+systemctl enable cloud-init
 systemctl enable vmtoolsd
-# Passwordless sudo for the user 'packer'
-echo "packer ALL=(ALL) NOPASSWD: ALL" >> /mnt/sysimage/etc/sudoers.d/packer
 %end

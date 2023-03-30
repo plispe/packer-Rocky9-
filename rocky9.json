@@ -2,12 +2,12 @@
   "variables": {
       "boot_wait": "5s",
       "disk_size": "40960",
-      "iso_checksum": "fc6b306b9fc8d327d7545373ce88c48bd1f7e84d29548814a91e84676b7d26e4",
-      "iso_url": "https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.0-x86_64-boot.iso",
+      "iso_checksum": "bae6eeda84ecdc32eb7113522e3cd619f7c8fc3504cb024707294e3c54e58b40",
+      "iso_url": "https://dfw.mirror.rackspace.com/rocky/9.1/isos/x86_64/Rocky-9.1-x86_64-minimal.iso",
       "memsize": "2048",
       "numvcpus": "2",
       "ssh_password" : "packer",
-      "ssh_username" : "packer",
+      "ssh_username" : "abcd1234",
       "vm_name": "Rocky-9-x86_64"
     },
     "builders": [
@@ -28,36 +28,23 @@
         "ssh_password": "{{ user `ssh_password` }}",
         "ssh_port": 22,
         "ssh_username": "{{ user `ssh_username` }}",
+        "skip_compaction": false,
+        "ssh_handshake_attempts": 1000,
         "ssh_timeout": "30m",
+        "vnc_disable_password": true,
+        "vnc_bind_address": "127.0.0.1",
+        "vmx_remove_ethernet_interfaces": true,
         "vm_name": "{{ user `vm_name` }}",
         "vmx_data": {
           "memsize": "{{ user `memsize` }}",
           "numvcpus": "{{ user `numvcpus` }}",
-          "virtualHW.version": "14"
+          "virtualHW.version": "14",
+          "cleanShutdown": "TRUE",
+          "softPowerOff": "FALSE",
+          "ethernet0.virtualDev": "e1000",
+          "ethernet0.startConnected": "TRUE",
+          "ethernet0.wakeonpcktrcv": "false"
         }
-      },
-      {
-        "type": "virtualbox-iso",
-        "boot_command": [
-          "<tab><bs><bs><bs><bs><bs>inst.text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
-        ],
-        "boot_wait": "{{ user `boot_wait` }}",
-        "disk_size": "{{ user `disk_size` }}",
-        "guest_os_type": "RedHat_64",
-        "headless": false,
-        "http_directory": "http",
-        "iso_checksum": "{{ user `iso_checksum` }}",
-        "iso_url": "{{ user `iso_url` }}",
-        "shutdown_command": "echo 'packer'|sudo -S /sbin/halt -h -p",
-        "ssh_password": "{{ user `ssh_password` }}",
-        "ssh_port": 22,
-        "ssh_username": "{{ user `ssh_username` }}",
-        "ssh_timeout": "30m",
-        "vm_name": "{{ user `vm_name` }}",
-        "vboxmanage": [
-          ["modifyvm", "{{.Name}}", "--memory", "{{ user `memsize` }}"],
-          ["modifyvm", "{{.Name}}", "--cpus", "{{ user `numvcpus` }}"]
-        ]
       }
     ],
   "provisioners": [

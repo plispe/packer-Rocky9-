@@ -6,8 +6,8 @@
       "iso_url": "https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.0-x86_64-boot.iso",
       "memsize": "2048",
       "numvcpus": "2",
-      "ssh_password" : "packer",
-      "ssh_username" : "packer",
+      "ssh_password" : "root",
+      "ssh_username" : "abcd1234",
       "vm_name": "Rocky-9-x86_64"
     },
     "builders": [
@@ -34,29 +34,7 @@
           "virtualHW.version": "14",
           "firmware": "efi"
         }
-      },
-      {
-        "type": "virtualbox-iso",
-        "boot_command": ["e<down><down><end><bs><bs><bs><bs><bs>inst.text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<leftCtrlOn>x<leftCtrlOff>"],
-        "boot_wait": "{{ user `boot_wait` }}",
-        "disk_size": "{{ user `disk_size` }}",
-        "guest_os_type": "RedHat_64",
-        "headless": false,
-        "http_directory": "http",
-        "iso_checksum": "{{ user `iso_checksum` }}",
-        "iso_url": "{{ user `iso_url` }}",
-        "shutdown_command": "echo 'packer'|sudo -S /sbin/halt -h -p",
-        "ssh_password": "{{ user `ssh_password` }}",
-        "ssh_port": 22,
-        "ssh_username": "{{ user `ssh_username` }}",
-        "ssh_timeout": "30m",
-        "vm_name": "{{ user `vm_name` }}",
-        "iso_interface": "sata",
-        "vboxmanage": [
-          ["modifyvm", "{{.Name}}", "--memory", "{{ user `memsize` }}"],
-          ["modifyvm", "{{.Name}}", "--cpus", "{{ user `numvcpus` }}"],
-          ["modifyvm", "{{.Name}}", "--firmware", "EFI"]
-        ]
+        
       }
     ],
   "provisioners": [
